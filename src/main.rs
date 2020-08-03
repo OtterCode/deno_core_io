@@ -14,7 +14,6 @@ use deno_core::ZeroCopyBuf;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::future::{ Future };
-use std::error::Error;
 use std::str;
 use std::pin::Pin;
 use std::task::Context;
@@ -26,7 +25,9 @@ use std::sync::mpsc::channel;
 
 #[tokio::main]
 async fn main() {
-    assert!(process("Test String".to_owned()).await == "Test String");
+    let result = process("Test String".to_owned()).await;
+    assert!(result == "TEST STRING");
+    println!("Test string returned in upper case.")
 }
 
 async fn process(test_string: String) -> String {
@@ -36,14 +37,13 @@ async fn process(test_string: String) -> String {
     let mut iso: Isolate = Isolate::new();
 
     iso.register_sync_op("return_string", move |_, zero_copy_bufs: &mut [ZeroCopyBuf]| {
-        dbg!(zero_copy_bufs.len());
         let buf = zero_copy_bufs[0].clone();
         let result = str::from_utf8(&*buf).unwrap().to_owned();
         tx.send(result).unwrap();
         "".to_owned()
     });
 
-    iso.register_sync_op("get_string", move |_, zero_copy_bufs: &mut [ZeroCopyBuf]| {
+    iso.register_sync_op("get_string", move |_, _zero_copy_bufs: &mut [ZeroCopyBuf]| {
         test_string.clone()
     });
 
