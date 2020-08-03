@@ -1,3 +1,5 @@
+// Credit to MDN for the encode/decode functions.
+
 function to_uint8array(str) {
   var utf8 = [];
   for (var i=0; i < str.length; i++) {
