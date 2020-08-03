@@ -1,0 +1,13 @@
+[package]
+name = "embedded_deno"
+version = "0.1.0"
+authors = ["Emmett Raymond <emmettaraymond@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+deno_core = "0.51.0"
+derive_deref = "1.1.0"
+tokio = { version = "0.2.22", features = ["full"] }
+pin-project = "0.4"
